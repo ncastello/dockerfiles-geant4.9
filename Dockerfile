@@ -123,7 +123,7 @@ USER ncastello
 
 
 # Boot container with GEANT4 started
-WORKDIR /geant4_damic
+WORKDIR /damic_geant4
 
 ENV HOME /home/ncastello
 
