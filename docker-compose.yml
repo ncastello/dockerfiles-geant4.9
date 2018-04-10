@@ -1,0 +1,17 @@
+version: "3.2"
+
+services:
+    geant49:
+        build: .
+        image: ncastello/geant4.9
+
+    damicdev:
+        image: ncastello/geant4.9
+        environment:
+            - DISPLAY=unix${DISPLAY}
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - type: bind
+              source: /data/DAMIC/canfranc/code_G4
+              target: /geant4_damic
+
