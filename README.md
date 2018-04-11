@@ -9,15 +9,25 @@ ubuntu-16.04 and contains the necessary packages to run GEDIS.
 
 Assuming `docker` and `docker-compose` is installed on your system (host-computer).
 
-Clone the docker geant4.9 repository and configure it
+1. Clone the docker geant4.9 repository and configure it
 ```bash
 $ git clone https://github.com/ncastello/dockerfiles-geant4.9
 $ cd dockerfiles-geant4.9
 ```
 
-Note that a geant4.9 reposity assume a Linux user named `ncastello` with ID `1000`.
-This is just my local user name in my host-computer and should be replaced by your
-user name and its ID number.
+2. The repository assumes a Linux user name called `ncastello` with an ID
+number `1000` (hard coded!). This is just my user name in my host-computer.
+Once you have cloned the repository, these hard coded information must be
+replaced by your user name and its ID number.  In order to do that, just go
+into the files
+
+`Dockerfile` and `docker-compose.yml`
+
+and replace
+
+`ncastello` by `your_linux_username` and,
+
+`1000` by `your_ID_namber`.
 
 
 
