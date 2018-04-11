@@ -1,0 +1,7 @@
+services:
+    damicdev:
+        volumes:
+            - type: bind
+              source: @replace_by_your_local_GEBIC_source_folder
+              target: /gebic
+

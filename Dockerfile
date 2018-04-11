@@ -7,8 +7,8 @@ LABEL author="nuria.castello.mor@gmail.com" \
 USER 0
 
 # uid (-u) and group IDs (-g)
-RUN useradd -u 1000 -md /home/ncastello -ms /bin/bash ncastello \
-    && usermod -a -G builder ncastello
+RUN useradd -md /home/gebicuser -ms /bin/bash gebicuser \
+    && usermod -a -G builder gebicuser
 
 # Correct base image to include ROOT python module
 ENV PYTHONPATH="${PYTHONPATH}:/usr/local/lib/root"
@@ -49,9 +49,9 @@ RUN mkdir -p /opt/geant4.9 \
        -Wno-dev \
     && make -j`grep -c processor /proc/cpuinfo` \
     && make install \
-    && echo '. /usr/local/bin/geant4.sh' >> ~ncastello/.bashrc \
-    && mkdir -p /data && chown -R ncastello:ncastello /data \
-    && chown ncastello:ncastello ~ncastello/.bashrc && chown -R ncastello:ncastello /opt/geant4.9
+    && echo '. /usr/local/bin/geant4.sh' >> ~gebicuser/.bashrc \
+    && /bin/bash -c ". /usr/local/bin/geant4.sh" \
+    && chown gebicuser:gebicuser ~gebicuser/.bashrc && chown -R gebicuser:gebicuser /opt/geant4.9
 
 
 # Download, extract and install DAWN
@@ -67,7 +67,7 @@ RUN mkdir /opt/DAWN  \
     && make guiclean \
     && make \
     && make install \
-    && chown -R ncastello:ncastello /opt/DAWN
+    && chown -R gebicuser:gebicuser /opt/DAWN
 
 
 # Install GEANT4 Python Environments
@@ -78,7 +78,7 @@ RUN cd /opt/geant4.9/geant4.9.6.p04/environments/g4py \
     && cp -rp /opt/geant4.9/geant4.9.6.p04/environments/g4py /opt/geant4.9/geant4.9.6.p04/environments/g4py27 \
     && cd /opt/geant4.9/geant4.9.6.p04/environments/g4py27 \
     && mkdir -p /opt/geant4.9/geant4.9.6.p04/environments/g4py27/python27 \
-    && chown -R ncastello:ncastello /opt/geant4.9/geant4.9.6.p04/environments/g4py27/python27 \
+    && chown -R gebicuser:gebicuser /opt/geant4.9/geant4.9.6.p04/environments/g4py27/python27 \
     && /bin/bash -c "./configure_edit_lib64_python34 linux64 --enable-openglxm \
         --enable-raytracerx --enable-openglx --with-g4install-dir=/usr/local \
         --with-boost-libdir=/usr/lib/x86_64-linux-gnu \
@@ -89,43 +89,18 @@ RUN cd /opt/geant4.9/geant4.9.6.p04/environments/g4py \
     && make install \
     && cp -r /opt/geant4.9/geant4.9.6.p04/environments/g4py27/python27/lib/* /usr/local/lib/python2.7/dist-packages/
 
+# Boot and gebic source container with GEANT4 started
+WORKDIR /gebic
 
-USER ncastello
+# Download gebic code from repository
+RUN cd /gebic && git clone https://castello@bitbucket.org/castello/gebic-gelatuca.git \
+    && cd gebic-gelatuca && mkdir build && cd build \
+    && cmake .. && make install \
+    chown -R gebicuser:gebicuser /gebic/gebic-gelatuca
 
-#RUN cd ~/GEANT4/source/geant4.9.6.p04/environments/g4py; \
-#    mkdir -p ~/GEANT4/source/geant4.9.6.p04/environments/g4py/python34; \
-#    ./configure_edit_lib64_python34 linux64 --with-python3 --enable-openglxm \
-#    --enable-raytracerx --enable-openglx --with-g4install-dir=/usr/local \
-#    --with-boost-libdir=/usr/lib/x86_64-linux-gnu \
-#    --with-boost-python-lib=boost_python-py34 \
-#    --prefix=~/GEANT4/source/geant4.9.6.p04/environments/g4py/python34; \
-#    make -j`grep -c processor /proc/cpuinfo`; \
-#    make install; \
-#    cd ~/GEANT4/source/geant4.9.6.p04/environments/g4py/python34/lib/Geant4; \
-#    python3 -c 'import py_compile; py_compile.compile( \"colortable.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"g4thread.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"g4viscp.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"hepunit.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"__init__.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"colortable.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"g4thread.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"g4viscp.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"hepunit.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"__init__.py\" )'; \
-#    cd ~/GEANT4/source/geant4.9.6.p04/environments/g4py/python34/lib/g4py; \
-#    python3 -c 'import py_compile; py_compile.compile( \"emcalculator.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"emcalculator.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"mcscore.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"mcscore.py\" )'; \
-#    python3 -c 'import py_compile; py_compile.compile( \"__init__.py\" )'; \
-#    python3 -O -c 'import py_compile; py_compile.compile( \"__init__.py\" )'; \
-#    cp -r ~/GEANT4/source/geant4.9.6.p04/environments/g4py/python34/lib/* /usr/local/lib/python3.4/dist-packages/
+USER gebicuser
 
-
-# Boot container with GEANT4 started
-WORKDIR /damic_geant4
-
-ENV HOME /home/ncastello
+ENV HOME /home/gebicuser
 
 ENTRYPOINT ["/bin/bash"]
 
