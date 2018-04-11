@@ -5,7 +5,8 @@ GEBIC (a MC simulation program developed using Geant4 which is used to
 calculate detector efficiency for each measured sample). This image is based on an
 ubuntu-16.04 and contains the necessary packages to run GEDIS.
 
-###Installation
+##Installation
+
 Assuming `docker` and `docker-compose` is installed on your system (host-computer).
 
 1. Clone the docker geant4.9 repository and configure it
