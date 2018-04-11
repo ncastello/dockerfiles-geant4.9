@@ -78,7 +78,7 @@ $ xhost +local:docker
 ## Note
 
 Note that if you have both __docker-compose.override.yml__ and __docker-compose.yml__ files, to run the container with a
-__production environment__ the following command must be executed\
+__production environment__  you just run `docker-compose` as follows
 
 ```bash
 $ docker-compose -f docker-compose.yml run --rm damicdev
