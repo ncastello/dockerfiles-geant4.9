@@ -38,6 +38,8 @@ The first to do is to give permissions to docker to access the X-server
 $ xhost +local:docker
 ```
 
+There are two ways to use this container:
+
 1. __As user__
 
     The recommended way to run GEBIC is with docker-compose
