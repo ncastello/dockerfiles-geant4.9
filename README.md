@@ -5,11 +5,12 @@ GEBIC (a MC simulation program developed using Geant4 which is used to
 calculate detector efficiency for each measured sample). This image is based on an
 ubuntu-16.04 and contains the necessary packages to run GEDIS.
 
-### Installation
+## Install
 
 Assuming `docker` and `docker-compose` is installed on your system (host-computer).
 
-1. Clone the docker geant4.9 repository and configure it
+1. Clone the docker geant4.9 repository
+
 ```bash
 $ git clone https://github.com/ncastello/dockerfiles-geant4.9
 $ cd dockerfiles-geant4.9
@@ -30,9 +31,30 @@ into the files
     `1000` by `your_ID_namber`.
 
 
+3. Create the docker image in your host-computer. Under `dockerfiles-geant4.9`
+   folder run
 
-### docker
-Remember to give permissions to docker to access the X-server
+```bash
+$ docker-compose build
+```
+
+that process will take a few minutes.
+
+4. Some additional instructions to check docker images and containers
+
+```bash
+$ docker
+```
+
+## RUN
+1. The first to do is to give permissions to docker to access the X-server
 ```bash
 $ xhost +local:docker
 ```
+
+2. The recommended way to launch all needed services is with `docker-compose`.
+```bash
+docker-compose
+```
+
+
