@@ -6,8 +6,9 @@ LABEL author="nuria.castello.mor@gmail.com" \
 
 USER 0
 
-# uid (-u) and group IDs (-g)
-RUN useradd -md /home/gebicuser -ms /bin/bash gebicuser \
+# uid (-u) and group IDs (-g) are fixed to 1000 to be used for development
+# purposes
+RUN useradd -u 1000 -md /home/gebicuser -ms /bin/bash gebicuser \
     && usermod -a -G builder gebicuser
 
 # Correct base image to include ROOT python module
@@ -93,14 +94,15 @@ RUN cd /opt/geant4.9/geant4.9.6.p04/environments/g4py \
 WORKDIR /gebic
 
 # Download gebic code from repository
-RUN cd /gebic && git clone https://castello@bitbucket.org/castello/gebic-gelatuca.git \
+RUN cd /gebic && git clone https://github.com/ncastello/gebic-gelatuca.git \
     && cd gebic-gelatuca && mkdir build && cd build \
     && cmake .. && make install \
-    chown -R gebicuser:gebicuser /gebic/gebic-gelatuca
+    && chown -R gebicuser:gebicuser /gebic
 
 USER gebicuser
 
 ENV HOME /home/gebicuser
+ENV PATH="${PATH}:/gebic/gebic-gelatuca/bin"
 
 ENTRYPOINT ["/bin/bash"]
 
