@@ -21,17 +21,17 @@ Once you have cloned the repository, these hard coded information must be
 replaced by your user name and its ID number.  In order to do that, just go
 into the files
 
-`Dockerfile` and `docker-compose.yml`
+    `Dockerfile` and `docker-compose.yml`
 
-and replace
+    and replace
 
-`ncastello` by `your_linux_username` and,
+    `ncastello` by `your_linux_username` and,
 
-`1000` by `your_ID_namber`.
-
-
+    `1000` by `your_ID_namber`.
 
 
+
+### docker
 Remember to give permissions to docker to access the X-server
 ```bash
 $ xhost +local:docker
