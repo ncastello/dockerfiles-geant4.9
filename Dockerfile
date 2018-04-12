@@ -93,8 +93,13 @@ RUN cd /opt/geant4.9/geant4.9.6.p04/environments/g4py \
 # Boot and gebic source container with GEANT4 started
 WORKDIR /gebic
 
-# Download gebic code from repository
+# Download gebic-gelatuca code from repository
 RUN cd /gebic && git clone https://github.com/ncastello/gebic-gelatuca.git \
+    && cd gebic-gelatuca && mkdir build && cd build \
+    && cmake .. && make install \
+
+# Download gebic-gelatuca code from repository
+RUN cd /gebic && git clone https://github.com/ncastello/gebic-georoel.git \
     && cd gebic-gelatuca && mkdir build && cd build \
     && cmake .. && make install \
     && chown -R gebicuser:gebicuser /gebic
@@ -102,7 +107,7 @@ RUN cd /gebic && git clone https://github.com/ncastello/gebic-gelatuca.git \
 USER gebicuser
 
 ENV HOME /home/gebicuser
-ENV PATH="${PATH}:/gebic/gebic-gelatuca/bin"
+ENV PATH="${PATH}:/gebic/gebic-gelatuca/bin:/gebic/gebic-georoel/bin"
 
 ENTRYPOINT ["/bin/bash"]
 
