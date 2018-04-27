@@ -18,7 +18,7 @@ $ git clone https://github.com/ncastello/dockerfiles-geant4.9
 $ cd dockerfiles-geant4.9
 ```
 
-2. To get the docker container you can either download the image from he dockerhub
+2. To get the docker container you can either download the image from the dockerhub
    ```bash
    $ docker pull ncastello/gebic-geant4.9
    ```
