@@ -97,10 +97,11 @@ WORKDIR /gebic
 RUN cd /gebic && git clone https://github.com/ncastello/gebic-gelatuca.git \
     && cd gebic-gelatuca && mkdir build && cd build \
     && cmake .. && make install
+#    && chown -R gebicuser:gebicuser /gebic
 
 # Download gebic-geodesic code from repository
 RUN cd /gebic && git clone https://github.com/ncastello/gebic-georoel.git \
-    && cd gebic-geodesic && mkdir build && cd build \
+    && cd gebic-georoel && mkdir build && cd build \
     && cmake .. && make install \
     && chown -R gebicuser:gebicuser /gebic
 
