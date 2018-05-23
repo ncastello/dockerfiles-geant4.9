@@ -8,8 +8,10 @@ USER 0
 
 # uid (-u) and group IDs (-g) are fixed to 1000 to be used for development
 # purposes
-RUN useradd -u 1000 -md /home/gebicuser -ms /bin/bash gebicuser \
-    && usermod -a -G builder gebicuser
+RUN useradd -u 1000 -md /home/gebicuser -ms /bin/bash -G builder,sudo gebicuser \
+#    && usermod -a -G builder gebicuser
+    && echo "gebicuser:docker" | chpasswd \
+    && echo "gebicuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Correct base image to include ROOT python module
 ENV PYTHONPATH="${PYTHONPATH}:/usr/local/lib/root"
@@ -30,6 +32,11 @@ RUN apt-get update && apt-get -y install \
     imagemagick \
     wget \
     vim \
+    tk \
+    ipython \
+    python-numpy \
+    python-scipy \
+    python-matplotlib \
     && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 
@@ -68,8 +75,15 @@ RUN mkdir /opt/DAWN  \
     && make guiclean \
     && make \
     && make install \
-    && chown -R gebicuser:gebicuser /opt/DAWN
-
+    && chown -R gebicuser:gebicuser /opt/DAWN \
+    && mkdir /opt/DAVID \
+    && cd /opt/DAVID \
+    && wget http://geant4.kek.jp/~tanaka/src/david_1_36a.taz \
+    && tar xzf david_1_36a.taz \
+    && rm david_1_36a.taz \
+    && cd /opt/DAVID/david_1_36a \
+    && make -f Makefile.GNU_g++ install \
+    && chown -R gebicuser:gebicuser /opt/DAVID
 
 # Install GEANT4 Python Environments
 RUN cd /opt/geant4.9/geant4.9.6.p04/environments/g4py \
@@ -109,6 +123,7 @@ USER gebicuser
 
 ENV HOME /home/gebicuser
 ENV PATH="${PATH}:/gebic/gebic-gelatuca/bin:/gebic/gebic-georoel/bin"
+
 
 ENTRYPOINT ["/bin/bash"]
 
